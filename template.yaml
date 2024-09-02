@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  MyS3Bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BuketName: my-sam-bucket-myy
+
+  MyIAMUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: my-sam-iam-user
+
+  MyUserPolicy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: MyUserS3LimitedPolicy
+      Users:
+        - Ref: MyIAMUser
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:ListBucket
+            Resource:
+              - "arn:aws:s3:::${MyS3Bucket}"
+              - "arn:aws:s3:::${MyS3Bucket}/*"
